@@ -1,7 +1,3 @@
-# Pensamento Computacional
-
----
-
 # Exercícios da Disciplina de Pensamento Computacional
 Este repositório contém todos as atividades realizadas na disciplina de Pensamento Computacional.
 
