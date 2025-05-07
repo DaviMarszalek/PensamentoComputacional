@@ -5,7 +5,7 @@ class Livro:
         self.__autor = autor
         self.__ano_publicacao = ano_publicacao
         self.__numero_paginas = numero_paginas
-        self.__pagina_atual = 1  # Inicializa a página atual como 1
+        self.__pagina_atual = 1 
 
     def avancar_pagina(self):
         if self.__pagina_atual < self.__numero_paginas:
