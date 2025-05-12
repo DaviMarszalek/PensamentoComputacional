@@ -12,10 +12,10 @@ class ContaBancaria:
         '''
         Construtor da classe ContaBancaria
         '''
-        self.titular = titular
-        self.saldo = saldo
-        self.limite = limite
-        self.historico = historico
+        self.__titular = titular
+        self.__saldo = saldo
+        self.__limite = limite
+        self.__historico = historico
         
     def depositar(self, valor):
         '''
@@ -24,12 +24,12 @@ class ContaBancaria:
         Return: True se a operação obtiver sucesso. False se a operação não for realizada.
         '''
         if valor > 0:
-            self.saldo += valor
-            self.historico.append({"operacao": 1,
-                                   "remetente": self.titular,
+            self.__saldo += valor
+            self.__historico.append({"operacao": 1,
+                                   "remetente": self.__titular,
                                    "destinatario": "",
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
             print(f"Depósito de R${valor} realizado com sucesso!")
             return True
@@ -43,21 +43,21 @@ class ContaBancaria:
         Entrada: valor (float).
         Return: True se a operação obtiver sucesso. False se a operação não for realizada.
         '''
-        if valor <= self.saldo:
-            self.saldo -= valor
-            self.historico.append({"operacao": 0,
-                                   "remetente": self.titular,
+        if valor <= self.__saldo:
+            self.__saldo -= valor
+            self.__historico.append({"operacao": 0,
+                                   "remetente": self.__titular,
                                    "destinatario": "",
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
             print(f"Saque de R${valor} realizado com sucesso!")
             return True
         else:
-            a = input(f"Deseja usar o limite de ({self.limite}) para sacar (R${valor}) ? (s para sim)")
+            a = input(f"Deseja usar o limite de ({self.__limite}) para sacar (R${valor}) ? (s para sim)")
             if a == 's':
-                if (self.saldo + self.limite) >= valor:
-                    self.saldo -= valor
+                if (self.__saldo + self.__limite) >= valor:
+                    self.__saldo -= valor
                     print(f"Saque de R${valor} realizado com sucesso!")
                     return True
                 else:
@@ -80,12 +80,12 @@ class ContaBancaria:
         if remtente != None:
             op = 2
         if valor > 0:
-            self.saldo += valor
-            self.historico.append({"operacao": op,
+            self.__saldo += valor
+            self.__historico.append({"operacao": op,
                                    "remetente": remtente,
-                                   "destinatario": self.titular,
+                                   "destinatario": self.__titular,
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
             print(f"Depósito de R${valor} realizado com sucesso!")
             return True
@@ -102,21 +102,21 @@ class ContaBancaria:
         op = 0
         if remtente != None:
             op = 2
-        if valor <= self.saldo:
-            self.saldo -= valor
-            self.historico.append({"operacao": op,
-                                   "remetente": self.titular,
+        if valor <= self.__saldo:
+            self.__saldo -= valor
+            self.__historico.append({"operacao": op,
+                                   "remetente": self.__titular,
                                    "destinatario": destinatario,
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
             print(f"Saque de R${valor} realizado com sucesso!")
             return True
         else:
-            a = input(f"Deseja usar o limite de ({self.limite}) para sacar (R${valor}) ? (s para sim)")
+            a = input(f"Deseja usar o limite de ({self.__limite}) para sacar (R${valor}) ? (s para sim)")
             if a == 's':
-                if (self.saldo + self.limite) >= valor:
-                    self.saldo -= valor
+                if (self.__saldo + self.__limite) >= valor:
+                    self.__saldo -= valor
                     print(f"Saque de R${valor} realizado com sucesso!")
                     return True
                 else:
@@ -133,7 +133,7 @@ class ContaBancaria:
             Return: True se a operação obtiver sucesso. False se a operação não for realizada.
             ''' 
             if self.sacar(valor, destinatario.titular)
-                destinatario.depositar(valor, self.titular)
+                destinatario.depositar(valor, self.__titular)
             """
 
 
@@ -147,26 +147,26 @@ class ContaBancaria:
         Entradas: valor (float), destinatário (string)
         Return: True se a operação obtiver sucesso. False se a operação não for realizada.
         '''
-        if valor <= self.saldo:
-            self.saldo -= valor
-            self.historico.append({"operacao": 2,
-                                   "remetente": self.titular,
+        if valor <= self.__saldo:
+            self.__saldo -= valor
+            self.__historico.append({"operacao": 2,
+                                   "remetente": self.__titular,
                                    "destinatario": destinatario.titular,
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
             print(f"Transferência de R${valor} realizada com sucesso!")
             return True
         else:
-           a = input(f"Deseja usar o limite de ({self.limite}) para sacar (R${valor}) ? (s para sim)")
+           a = input(f"Deseja usar o limite de ({self.__limite}) para sacar (R${valor}) ? (s para sim)")
            if a == 's':
-                if (self.saldo + self.limite) >= valor:
-                    self.saldo -= valor
-                    self.historico.append({"operacao": 2,
-                                   "remetente": self.titular,
+                if (self.__saldo + self.__limite) >= valor:
+                    self.__saldo -= valor
+                    self.__historico.append({"operacao": 2,
+                                   "remetente": self.__titular,
                                    "destinatario": destinatario.titular,
                                    "valor": valor,
-                                   "saldo": self.saldo,
+                                   "saldo": self.__saldo,
                                    "dataetempo": int(time.time())})
                     print(f"Transferência de R${valor} realizado com sucesso!")
                     return True
@@ -178,7 +178,7 @@ class ContaBancaria:
         
     def exibir_historico(self):
         print("Histórico de transações:")   
-        for transacao in self.historico:
+        for transacao in self.__historico:
             dt = time.localtime(transacao["dataetempo"])
             print("Op:", transacao["operacao"],
                   "- Remetente:", transacao['remetente'], 
@@ -186,11 +186,13 @@ class ContaBancaria:
                   "- Saldo:", transacao["saldo"],
                   "- Valor:", transacao["valor"],
                   "- Data e Tempo:", f"{dt.tm_mday}/{dt.tm_mon}/{dt.tm_year}", 
-                  str(dt.tm_hour) + ":" + str(dt.tm_min) + ":" + str(dt.tm_sec))
-            
-            
-                
-                  
+                  str(dt.tm_hour) + ":" + str(dt.tm_min) + ":" + str(dt.tm_sec))   
         
     def exibir_saldo(self):  
-        print(f"Titular: {self.titular} - Saldo: {self.saldo} - Limite: {self.limite}")
+        print(f"Titular: {self.__titular} - Saldo: {self.__saldo} - Limite: {self.__limite}")
+        
+    def getTitular(self):
+        '''
+        Objetivo: Método que retorna o titular da conta bancária sem altera-lo.'''
+        return self.__titular
+   
