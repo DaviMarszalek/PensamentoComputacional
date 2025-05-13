@@ -8,16 +8,20 @@ class ContaBancaria:
     OBS: Operações no histórico: 0 - sacar, 1 - depositar, 2 - transferir
     '''
     
-    def __init__(self, titular, saldo, limite, historico):
+    def __init__(self, titular: str, saldo: float, limite: float, chaves_pix: list, historico: list) -> bool:
+
         '''
         Construtor da classe ContaBancaria
         '''
         self.__titular = titular
         self.__saldo = saldo
         self.__limite = limite
+        self.__chaves_pix = chaves_pix
         self.__historico = historico
         
-    def depositar(self, valor):
+        return True
+        
+    def depositar(self, valor: float) -> bool:
         '''
         Objetivo: Método que realiza o depósito de um valor na conta bancária.
         Entrada: valor (float).
@@ -35,9 +39,12 @@ class ContaBancaria:
             return True
         else:
             print(f"Valor {valor} inválido para depósito.")   
-            return False 
+            return False  
+          
+
     
-    def sacar(self, valor):
+    
+    def sacar(self, valor: float) -> bool:
         '''
         Objetivo: Método que realiza o saque de um valor na conta bancária.
         Entrada: valor (float).
@@ -66,8 +73,6 @@ class ContaBancaria:
                 print("Operação com limite cancelada.")        
         return False        
         
-
-
 
     """
     def depositar(self, valor, remetente = None):
@@ -136,12 +141,7 @@ class ContaBancaria:
                 destinatario.depositar(valor, self.__titular)
             """
 
-
-
-
-
-
-    def transferir(self, valor, destinatario):
+    def transferir(self, valor: float, destinatario: str) -> bool:
         '''
         Objetivo: Método que realiza a transferência de um valor entre contas bancárias.
         Entradas: valor (float), destinatário (string)
@@ -175,8 +175,8 @@ class ContaBancaria:
            else:
                 print("Operação com limite cancelada.")        
         return False         
-        
-    def exibir_historico(self):
+    
+    def exibir_historico(self) -> None:
         print("Histórico de transações:")   
         for transacao in self.__historico:
             dt = time.localtime(transacao["dataetempo"])
@@ -187,12 +187,15 @@ class ContaBancaria:
                   "- Valor:", transacao["valor"],
                   "- Data e Tempo:", f"{dt.tm_mday}/{dt.tm_mon}/{dt.tm_year}", 
                   str(dt.tm_hour) + ":" + str(dt.tm_min) + ":" + str(dt.tm_sec))   
-        
-    def exibir_saldo(self):  
+     
+    def exibir_saldo(self) -> None:  
         print(f"Titular: {self.__titular} - Saldo: {self.__saldo} - Limite: {self.__limite}")
         
     def getTitular(self):
         '''
         Objetivo: Método que retorna o titular da conta bancária sem altera-lo.'''
         return self.__titular
+    
+    def getChavesPix(self) -> list:
+        
    

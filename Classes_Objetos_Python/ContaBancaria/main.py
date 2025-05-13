@@ -49,7 +49,16 @@ while True:
             limite = 200
             if saldo > 0:
                 limite += int(saldo / 2)
-            conta = ContaBancaria(titular, saldo, limite, [])
+            while True:
+                o = input("Deseja cadastrar chaves PIX? (s/n): ")
+                if o == 's':
+                    try:   
+                        chave_pix_celular = int(input("Digite a chave pix CELULAR: "))
+                        chave_pix_email = str(input("Digite a chave pix EMAIL: "))    
+                        chave_pix_CPF = int(input("Digite a chave pix CPF: "))
+                    except ValueError:
+                        print("Por favor, digite um valor válido.")     
+            conta = ContaBancaria(titular, saldo, limite, [chaves_pix_celular, chaves_pix_email, chave_pix_CPF] [])
             banco.append(conta)
             print(f"Conta criada para {titular}.")        
         elif opcao == 2:
