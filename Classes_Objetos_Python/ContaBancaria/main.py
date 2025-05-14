@@ -16,7 +16,6 @@ def excluir_conta():
         if conta_excluir.saldo != 0:
             print(f"A conta de {conta_excluir.titular} tem saldo de R${conta_excluir.saldo:.2f}.")
             print("Para excluir, o saldo precisa ser zero.")
-            # Simplificando a lógica de exclusão para iniciantes
         else:
             banco.remove(conta_excluir)
             print(f"Conta de {conta_excluir.titular} excluída.")
@@ -32,6 +31,7 @@ while True:
     print("5 - Exibir saldo")
     print("6 - Exibir histórico")
     print("7 - Excluir conta")
+    print("8 - PIX")
     print("0 - Sair")
 
     opcao = input("Escolha uma opção: ")
@@ -49,18 +49,34 @@ while True:
             limite = 200
             if saldo > 0:
                 limite += int(saldo / 2)
-            while True:
-                o = input("Deseja cadastrar chaves PIX? (s/n): ")
-                if o == 's':
-                    try:   
-                        chave_pix_celular = int(input("Digite a chave pix CELULAR: "))
-                        chave_pix_email = str(input("Digite a chave pix EMAIL: "))    
-                        chave_pix_CPF = int(input("Digite a chave pix CPF: "))
-                    except ValueError:
-                        print("Por favor, digite um valor válido.")     
-            conta = ContaBancaria(titular, saldo, limite, [chaves_pix_celular, chaves_pix_email, chave_pix_CPF] [])
+            o = input("Deseja cadastrar uma chave pix? (s/n): ")
+            if o == 's':    
+                while True:
+                      try:
+                          chave_pix_celular = int(input("Digite a chave pix celular: "))
+                          break
+                      except ValueError:
+                            print("Por favor, digite um número válido para a chave pix CELULAR.")
+                while True:
+                      try:
+                          chave_pix_email = str(input("Digite a chave pix EMAIL: "))
+                          break
+                      except ValueError:
+                            print("Por favor, digite um número válido para a chave pix email.")
+                while True:
+                      try:
+                          chave_pix_CPF = int(input("Digite a chave pix CPF: "))
+                          break
+                      except ValueError:
+                            print("Por favor, digite um número válido para a chave pix CPF.")  
+            else:
+                chave_pix_celular = None
+                chave_pix_email = None
+                chave_pix_CPF = None                                                        
+            conta = ContaBancaria(titular, saldo, limite, [chave_pix_celular, chave_pix_email, chave_pix_CPF], [])
             banco.append(conta)
             print(f"Conta criada para {titular}.")        
+                
         elif opcao == 2:
             print("\n--- Sacar ---")
             if banco:
@@ -132,6 +148,31 @@ while True:
                 print("Não há contas cadastradas.")
         elif opcao == 7:
             excluir_conta()
+            
+        elif opcao == 8:
+            if len(banco) >= 2:
+                titular_origem = input("Digite o nome completo do titular da conta de origem: ")
+                conta_origem = encontrar_conta(titular_origem)
+                if conta_origem:
+                    pix_destino = input("Digite o PIX da conta de destino: ")
+                    for conta in banco:
+                        if conta.chaves_pix[0] == pix_destino or conta.chaves_pix[1] == pix_destino or conta.chaves_pix[2] == pix_destino:
+                            conta_destino = conta
+                            break
+                    if conta_destino:
+                        valor = input("Digite o valor para transferir: ")
+                        if saldo < valor:
+                            print("Saldo insuficiente.")
+                        else:     
+                            valor = float(valor)
+                            conta_origem.transferir(valor, conta_destino)
+                    else:
+                        print("Conta de destino não encontrada.")
+                else:
+                    print("Conta de origem não encontrada.")
+            else:
+                print("É necessário ter pelo menos duas contas para transferir.")
+            
         elif opcao == 0:
             print("Obrigado por usar o sistema!")
             break

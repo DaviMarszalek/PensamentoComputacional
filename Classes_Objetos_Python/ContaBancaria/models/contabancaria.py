@@ -8,7 +8,7 @@ class ContaBancaria:
     OBS: Operações no histórico: 0 - sacar, 1 - depositar, 2 - transferir
     '''
     
-    def __init__(self, titular: str, saldo: float, limite: float, chaves_pix: list, historico: list) -> bool:
+    def __init__(self, titular: str, saldo: float, limite: float, chaves_pix: list, historico: list) -> None:
 
         '''
         Construtor da classe ContaBancaria
@@ -19,7 +19,6 @@ class ContaBancaria:
         self.__chaves_pix = chaves_pix
         self.__historico = historico
         
-        return True
         
     def depositar(self, valor: float) -> bool:
         '''
@@ -191,11 +190,23 @@ class ContaBancaria:
     def exibir_saldo(self) -> None:  
         print(f"Titular: {self.__titular} - Saldo: {self.__saldo} - Limite: {self.__limite}")
         
+    def pix(self, valor, chave_pix: list) -> bool:
+        '''
+        Objetivo: Método que realiza a transferência de um valor entre contas bancárias.
+        Entradas: va
+        Return: True se a operação obtiver sucesso. False se a operação não for realizada.
+        '''
+        if chave_pix in self.__chaves_pix:
+            return True
+        else:
+            print("Chave pix não encontrada.")
+            return False    
+        
     def getTitular(self):
         '''
         Objetivo: Método que retorna o titular da conta bancária sem altera-lo.'''
         return self.__titular
     
     def getChavesPix(self) -> list:
-        
+        return self.__chaves_pix
    
