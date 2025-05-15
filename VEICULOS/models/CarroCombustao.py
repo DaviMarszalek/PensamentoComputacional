@@ -9,7 +9,7 @@ class CarroCombustao(Veiculos):
                  combustivel: str, nPortas: int, nAssentos: int,
                  nCilindrada: int, nCambio: str, nivel_combustivel: int) -> None:
         
-        Veiculos().__init__(placa, modelo, marca, ano, cor, valor_fipe)
+        Veiculos.__init__(self, placa, modelo, marca, ano, cor, valor_fipe)
         
         self.__combustivel = combustivel                
         self.__nPortas = nPortas
@@ -23,7 +23,7 @@ class CarroCombustao(Veiculos):
         Retorna uma string com as informações do carro a combustão
         '''
         #Reutiliza o método __str__ da classe pai(Veiculos)
-        infos = Veiculos().__str__()
+        infos = Veiculos.__str__(self)
         #Adiciona as informações específicas do carro a combustão
         infos += f"Combustível: {self.__combustivel}\n"
         infos += f"Número de Portas: {self.__nPortas}\n"
