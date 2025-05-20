@@ -10,7 +10,7 @@ class CarroEletrico(Veiculos):
                  ano: int, cor: str, valor_fipe: float,
                  nAssentos: int, nPortas: int, nivel_bateria: int, tipo_bateria: str, autonomia: int) -> None:
         
-        Veiculos().__init__(placa, modelo, marca, ano, cor, valor_fipe)
+        Veiculos.__init__(self, placa, modelo, marca, ano, cor, valor_fipe)
         self.__nAssentos = nAssentos
         self.__nPortas = nPortas
         self.__nivel_bateria = nivel_bateria
@@ -18,7 +18,7 @@ class CarroEletrico(Veiculos):
         self.__autonomia = autonomia
         
     def __str__(self) -> str:
-        infos = Veiculos().__str__()
+        infos = Veiculos.__str__(self)
         infos += f"Número de Assentos: {self.__nAssentos}\n" 
         infos += f"Número de Portas: {self.__nPortas}\n"
         infos += f"Nível de Bateria: {self.__nivel_bateria}\n"

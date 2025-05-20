@@ -11,15 +11,15 @@ class CarroConvEletrico( CarroCombustao, CarroEletrico):
                  nCilindrada: int, nCambio: str, nivel_combustivel: int,
                  nivel_bateria: int, tipo_bateria: str, autonomia: int) -> None:
         
-        CarroCombustao().__init__(placa, modelo, marca, ano, cor, valor_fipe,
+        CarroCombustao.__init__(self, placa, modelo, marca, ano, cor, valor_fipe,
                          combustivel, nPortas, nAssentos,
                          nCilindrada, nCambio, nivel_combustivel)
         
-        CarroEletrico.__init__(placa, modelo, marca, ano, cor, valor_fipe, 
+        CarroEletrico.__init__(self, placa, modelo, marca, ano, cor, valor_fipe, 
                                nAssentos, nPortas, nivel_bateria, tipo_bateria, autonomia)
         
     def __str__(self) -> str:
-        infos = CarroCombustao().__str__(self)
+        infos = CarroCombustao.__str__(self)
         infos += f"Nível de Bateria: {CarroEletrico.get_nivel_bateria(self)}\n"
         infos += f"Tipo de Bateria: {CarroEletrico.get_tipo_bateria(self)}\n"    
         infos += f"Autonomia: {CarroEletrico.get_autonomia(self)}\n"

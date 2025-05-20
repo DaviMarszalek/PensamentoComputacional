@@ -2,6 +2,9 @@ from models.Veiculos import Veiculos
 from models.CarroCombustao import CarroCombustao
 from models.CarroEletrico import CarroEletrico
 from models.CarroConvEletrico import CarroConvEletrico
+from models.Carro import Carro
+from models.Moto import Moto
+from models.Caminhao import Caminhao
 
 voyage = Veiculos("BCE9D36", "Voyage", "Volkswagen",
                   2018, "Vermelho", 47793)
@@ -23,8 +26,22 @@ fusca_eletrico = CarroConvEletrico(placa="IAA0D36",         modelo="Fusca 1600 E
                                    nivel_bateria=65,        tipo_bateria="Lithium-ion",
                                    autonomia=151)
 
-print(fusca_eletrico)
+xj6 = Moto("JDN0A00", "XJ6", "Jaguar",
+                  2021, "Preto", 950000, 20)
 
-fusca_eletrico.abastecer(10)
+astra = Carro("JDN0A11", "Astra", "Chevrolet",
+                  2021, "Preto", 950000, 12)
 
-print(fusca_eletrico)
+scania = Caminhao("JDN0A22", "Scania 30 G", "Scania",
+                  2021, "Preto", 2500000, 5)
+
+
+
+distancia = int(input("Informe a distância do percurso e descubra qual a eficiencia do veículo:\n"))
+print("Consumo do Astra: ", astra.calcular_consumo(distancia), "L")
+print("Consumo da XJ6: ", xj6.calcular_consumo(distancia), "L")
+print("Consumo da Scania: ", scania.calcular_consumo(distancia), "L")
+
+
+
+
