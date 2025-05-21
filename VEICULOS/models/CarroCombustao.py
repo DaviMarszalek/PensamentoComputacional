@@ -47,3 +47,11 @@ class CarroCombustao(Veiculos):
             self.__nivel_combustivel = novo_percentual
             return True
         return False
+    
+    def calcular_consumo(self, distancia: float) -> float:
+        '''
+        Método para calcular o consumo do veículo
+        Argumento: distancia (float): distância a ser percorrida
+        '''
+        self.distancia = distancia
+        return distancia / self.__eficiencia  

@@ -5,6 +5,7 @@ from models.CarroConvEletrico import CarroConvEletrico
 from models.Carro import Carro
 from models.Moto import Moto
 from models.Caminhao import Caminhao
+from models.Frota import Frota
 
 voyage = Veiculos("BCE9D36", "Voyage", "Volkswagen",
                   2018, "Vermelho", 47793)
@@ -36,12 +37,15 @@ scania = Caminhao("JDN0A22", "Scania 30 G", "Scania",
                   2021, "Preto", 2500000, 5)
 
 
-
+'''
 distancia = int(input("Informe a distância do percurso e descubra qual a eficiencia do veículo:\n"))
 print("Consumo do Astra: ", astra.calcular_consumo(distancia), "L")
 print("Consumo da XJ6: ", xj6.calcular_consumo(distancia), "L")
 print("Consumo da Scania: ", scania.calcular_consumo(distancia), "L")
+'''
 
+frota = Frota(jetta_gli)
+frota.adicionar_veiculo(jetta_gli)
 
-
-
+distancia = int(input("Informe a distância do percurso e descubra qual o consumo total da frota:\n"))
+print(f"Consumo total da frota para {distancia} km: {consumo_total} litros")
