@@ -6,8 +6,9 @@ from models.Carro import Carro
 from models.Moto import Moto
 from models.Caminhao import Caminhao
 from models.Frota import Frota
+from models.VeiculoEletrico import VeiculoEletrico
 
-voyage = Veiculos("BCE9D36", "Voyage", "Volkswagen",
+'''voyage = Veiculos("BCE9D36", "Voyage", "Volkswagen",
                   2018, "Vermelho", 47793)
 
 jetta_gli = CarroCombustao("JDM9D36", "Jetta GLI", "Volkswagen",
@@ -25,7 +26,7 @@ fusca_eletrico = CarroConvEletrico(placa="IAA0D36",         modelo="Fusca 1600 E
                                    nAssentos=5,             nCilindrada=1600, 
                                    nCambio="MT 4",          nivel_combustivel=24, 
                                    nivel_bateria=65,        tipo_bateria="Lithium-ion",
-                                   autonomia=151)
+                                   autonomia=151)'''
 
 xj6 = Moto("JDN0A00", "XJ6", "Jaguar",
                   2021, "Preto", 950000, 20)
@@ -44,8 +45,28 @@ print("Consumo da XJ6: ", xj6.calcular_consumo(distancia), "L")
 print("Consumo da Scania: ", scania.calcular_consumo(distancia), "L")
 '''
 
-frota = Frota(jetta_gli)
+'''frota = Frota(jetta_gli)
 frota.adicionar_veiculo(jetta_gli)
+'''
+#distancia = int(input("Informe a distância do percurso e descubra qual o consumo total da frota:\n"))
+#print(f"Consumo total da frota para {distancia} km: {Frota.consumo_total} litros")
 
-distancia = int(input("Informe a distância do percurso e descubra qual o consumo total da frota:\n"))
-print(f"Consumo total da frota para {distancia} km: {consumo_total} litros")
+#print(f"Consumo total da frota para 100 km: {Frota.consumo_total(100)} litros")
+
+'''tesla_model = VeiculoEletrico("JDN0A00", "Tesla Model S", "Tesla",
+                                 2021, "Branco", 950000, 4, 5, 61,
+                                "Lithium-ion", 491, 0.15)'''
+'''print(tesla_model)
+tesla_model.recarregar(50)
+print(tesla_model)
+print("Consumo do tesla para 100 km:", tesla_model.calcular_consumo(100), "kWh/km")'''
+
+'''carro = Veiculos("ABC1234", "Gol", "Volkswagen", 2020, "Vermelho", 45000.0)
+print(carro)
+
+print(f"Placa atual: {carro.getPlaca()}")
+carro.setPlaca("XYZ5678")
+print(f"Placa atualizada: {carro.getPlaca()}")
+carro.setPlaca("A0C1234")
+'''
+

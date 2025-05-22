@@ -1,5 +1,5 @@
 class Frota:
-    def __init__(self, veiculos):
+    def __init__(self, veiculos = list):
         
         self.__veiculos = [veiculos]
     
