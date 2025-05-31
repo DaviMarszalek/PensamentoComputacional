@@ -1,6 +1,7 @@
 from models.Carro import Carro
 from models.Moto import Moto
 from models.Caminhao import Caminhao
+from models.Proprietario import Proprietario
 from utils.erros import *
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -39,7 +40,7 @@ class SistemaVeiculos:
         # Configura cada tela
         self.configurar_tela_principal()
         self.configurar_tela_cadastro()
-        #self.configurar_tela_cadastro_proprietario()
+        self.configurar_tela_cadastro_proprietario()
         self.configurar_tela_listagem()
         
         # Mostrar a tela principal
@@ -61,6 +62,10 @@ class SistemaVeiculos:
         btn_cadastrar = tk.Button(frame, text="Cadastrar Novo Veículo", width=25, height=2,
                                  command=lambda: self.mostrar_tela(self.tela_cadastro))
         btn_cadastrar.pack(pady=10)
+
+        btn_cadastrar_proprietário = tk.Button(frame, text="Cadastrar Proprietário", width=25, height=2,
+                                 command=lambda: self.mostrar_tela(self.tela_cadastro_proprietario))
+        btn_cadastrar_proprietário.pack(pady=10)
         
         btn_listar = tk.Button(frame, text="Listar Veículos", width=25, height=2,
                               command=lambda: self.atualizar_listagem())
@@ -145,6 +150,86 @@ class SistemaVeiculos:
         tk.Button(botoes_frame, text="Salvar", width=10,
                 command=self.salvar_veiculo).pack(side="left", padx=10)
     
+    def configurar_tela_cadastro_proprietario(self):
+        #Título
+        titulo = tk.Label(self.tela_cadastro_proprietario, text="CADASTRO", font=("Arial", 16, "bold"))
+        titulo.pack(pady=20)
+        
+        form_frame = tk.Frame(self.tela_cadastro_proprietario, padx=20)
+        form_frame.pack(fill="both")
+
+        # Campos do formulário
+        tk.Label(form_frame, text="Nome Completo:").grid(row=0, column=0, sticky="e", pady=5, padx=5)
+        self.prop_nome_entry = tk.Entry(form_frame, width=30)
+        self.prop_nome_entry.grid(row=0, column=1, sticky="w", pady=5, padx=5)
+
+        tk.Label(form_frame, text="CPF (somente números):").grid(row=1, column=0, sticky="e", pady=5, padx=5)
+        self.prop_cpf_entry = tk.Entry(form_frame, width=20)
+        self.prop_cpf_entry.grid(row=1, column=1, sticky="w", pady=5, padx=5)
+
+        tk.Label(form_frame, text="Placa do Veículo:").grid(row=2, column=0, sticky="e", pady=5, padx=5)
+        self.prop_placa_entry = tk.Entry(form_frame, width=15)
+        self.prop_placa_entry.grid(row=2, column=1, sticky="w", pady=5, padx=5)
+        # Você pode querer adicionar um recurso para selecionar um veículo existente
+        # ou garantir que esta placa corresponda a um veículo cadastrado se você tiver um registro de veículos
+
+        tk.Label(form_frame, text="Descrição do Veículo:").grid(row=3, column=0, sticky="e", pady=5, padx=5)
+        self.prop_veiculo_desc_entry = tk.Entry(form_frame, width=30)
+        self.prop_veiculo_desc_entry.grid(row=3, column=1, sticky="w", pady=5, padx=5)
+        tk.Label(form_frame, text="(Ex: Carro Gol 1.0 Prata)").grid(row=4, column=1, sticky="w", padx=5, pady=(0,10))
+
+
+        # Botões de ação
+        botoes_frame = tk.Frame(self.tela_cadastro_proprietario)
+        botoes_frame.pack(pady=20)
+
+        tk.Button(botoes_frame, text="Cancelar", width=12,
+                  command=self.tela_cadastro_proprietario.destroy).pack(side="left", padx=10)
+        # Supondo que self.mostrar_tela(self.tela_principal) ocultaria a janela atual
+        # e mostraria a principal. Usar destroy() é mais simples se for um Toplevel.
+        # Se você tiver uma navegação mais complexa, substitua destroy pela sua função:
+        # command=lambda: self.mostrar_tela(self.tela_principal, current_screen=self.tela_cadastro_proprietario)).pack(side="left", padx=10)
+
+        tk.Button(botoes_frame, text="Salvar Proprietário", width=15,
+                  command=self.salvar_proprietario).pack(side="left", padx=10)
+
+    def salvar_proprietario(self):
+        nome = self.prop_nome_entry.get().strip()
+        cpf = self.prop_cpf_entry.get().strip()
+        placa = self.prop_placa_entry.get().strip()
+        veiculo_desc = self.prop_veiculo_desc_entry.get().strip()
+
+        # Verificação básica de campos vazios (embora a classe Proprietario também verifique)
+        if not all([nome, cpf, placa, veiculo_desc]):
+            messagebox.showerror("Erro de Entrada", "Todos os campos são obrigatórios!", parent=self.tela_cadastro_proprietario)
+            return
+
+        try:
+            novo_proprietario = Proprietario(nome=nome, CPF=cpf, placa=placa, veiculo_desc=veiculo_desc)
+            
+            # --- Espaço reservado para onde você armazenaria o novo proprietário ---
+            # Exemplo: self.proprietarios.append(novo_proprietario)
+            # Por enquanto, apenas imprimindo e mostrando sucesso
+            print(f"Novo proprietário cadastrado:\n{novo_proprietario}")
+            # --------------------------------------------------------------------
+
+            messagebox.showinfo("Sucesso", f"Proprietário {nome} cadastrado com sucesso!", parent=self.tela_cadastro_proprietario)
+            
+            # Limpar campos após salvar com sucesso
+            self.prop_nome_entry.delete(0, tk.END)
+            self.prop_cpf_entry.delete(0, tk.END)
+            self.prop_placa_entry.delete(0, tk.END)
+            self.prop_veiculo_desc_entry.delete(0, tk.END)
+            
+            # Opcionalmente, feche a janela de cadastro ou navegue para outra tela
+            # self.tela_cadastro_proprietario.destroy()
+            # self.mostrar_tela(self.tela_principal) 
+
+        except ValueError as e: # Captura erros de validação da classe Proprietario
+            messagebox.showerror("Erro de Validação", str(e), parent=self.tela_cadastro_proprietario)
+        except Exception as e: # Captura quaisquer outros erros inesperados
+            messagebox.showerror("Erro Inesperado", f"Ocorreu um erro: {str(e)}", parent=self.tela_cadastro_proprietario)
+        
     def mostrar_campos_especificos(self):
         # Esconder todos os frames de campos específicos
         self.frame_carro.pack_forget()
@@ -159,21 +244,7 @@ class SistemaVeiculos:
             self.frame_moto.pack()
         elif tipo == "Caminhao":
             self.frame_caminhao.pack()
-            
-    def configurar_tela_cadastro_proprietario(self):
-        #Título
-        titulo = tk.Label(self.configurar_tela_cadastro_proprietario, text="CADASTRO", font=("Arial", 16, "bold"))
-        titulo.pack(pady=20)
         
-        form_frame = tk.Frame(self.tela_cadastro_proprietario, padx=20)
-        form_frame.pack(fill="both")
-        
-        
-        
-        
-        
-            
-    
     def configurar_tela_listagem(self):
         # Título
         titulo = tk.Label(self.tela_listagem, text="VEÍCULOS CADASTRADOS", font=("Arial", 16, "bold"))
