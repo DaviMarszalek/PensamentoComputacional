@@ -31,17 +31,19 @@ class SistemaVeiculos:
         self.tela_principal = tk.Frame(self.container)
         self.tela_cadastro = tk.Frame(self.container)
         self.tela_cadastro_proprietario = tk.Frame(self.container)
-        self.tela_listagem = tk.Frame(self.container)
+        self.tela_listagem_veiculos = tk.Frame(self.container)
+        self.tela_listagem_proprietario = tk.Frame(self.container)
         
         # Posiciona as telas no mesmo local
-        for tela in (self.tela_principal, self.tela_cadastro, self.tela_cadastro_proprietario, self.tela_listagem):
+        for tela in (self.tela_principal, self.tela_cadastro, self.tela_cadastro_proprietario, self.tela_listagem_veiculos, self.tela_listagem_proprietario):
             tela.grid(row=0, column=0, sticky="nsew")
         
         # Configura cada tela
         self.configurar_tela_principal()
         self.configurar_tela_cadastro()
         self.configurar_tela_cadastro_proprietario()
-        self.configurar_tela_listagem()
+        self.configurar_tela_listagem_veiculos()
+        self.configurar_tela_listagem_proprietario()
         
         # Mostrar a tela principal
         self.mostrar_tela(self.tela_principal)
@@ -197,21 +199,23 @@ class SistemaVeiculos:
         nome = self.prop_nome_entry.get().strip()
         cpf = self.prop_cpf_entry.get().strip()
         placa = self.prop_placa_entry.get().strip()
-        veiculo_desc = self.prop_veiculo_desc_entry.get().strip()
+        descricao_veiculo = self.prop_descricao_veiculo_entry.get().strip()
 
         # Verificação básica de campos vazios (embora a classe Proprietario também verifique)
-        if not all([nome, cpf, placa, veiculo_desc]):
+        if not all([nome, cpf, placa, descricao_veiculo]):
             messagebox.showerror("Erro de Entrada", "Todos os campos são obrigatórios!", parent=self.tela_cadastro_proprietario)
+            return
+        
+        # Validar formato da placa (ABC1234 ou ABC1D23)
+        if not re.match(r'^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$', placa):
+            messagebox.showwarning("Placa inválida", "A placa deve seguir o padrão ABC1234 ou ABC1D23")
             return
 
         try:
-            novo_proprietario = Proprietario(nome=nome, CPF=cpf, placa=placa, veiculo_desc=veiculo_desc)
+            novo_proprietario = Proprietario(nome=nome, CPF=cpf, placa=placa, descricao_veiculo=descricao_veiculo)
             
-            # --- Espaço reservado para onde você armazenaria o novo proprietário ---
-            # Exemplo: self.proprietarios.append(novo_proprietario)
-            # Por enquanto, apenas imprimindo e mostrando sucesso
+            self.proprietarios.append(novo_proprietario)
             print(f"Novo proprietário cadastrado:\n{novo_proprietario}")
-            # --------------------------------------------------------------------
 
             messagebox.showinfo("Sucesso", f"Proprietário {nome} cadastrado com sucesso!", parent=self.tela_cadastro_proprietario)
             
@@ -219,11 +223,11 @@ class SistemaVeiculos:
             self.prop_nome_entry.delete(0, tk.END)
             self.prop_cpf_entry.delete(0, tk.END)
             self.prop_placa_entry.delete(0, tk.END)
-            self.prop_veiculo_desc_entry.delete(0, tk.END)
+            self.prop_descricao_veiculo_entry.delete(0, tk.END)
             
-            # Opcionalmente, feche a janela de cadastro ou navegue para outra tela
+            # fechar a janela de cadastro ou navegar para outra tela
             # self.tela_cadastro_proprietario.destroy()
-            # self.mostrar_tela(self.tela_principal) 
+            self.mostrar_tela(self.tela_principal) 
 
         except ValueError as e: # Captura erros de validação da classe Proprietario
             messagebox.showerror("Erro de Validação", str(e), parent=self.tela_cadastro_proprietario)
@@ -245,13 +249,13 @@ class SistemaVeiculos:
         elif tipo == "Caminhao":
             self.frame_caminhao.pack()
         
-    def configurar_tela_listagem(self):
+    def configurar_tela_listagem_veiculos(self):
         # Título
-        titulo = tk.Label(self.tela_listagem, text="VEÍCULOS CADASTRADOS", font=("Arial", 16, "bold"))
+        titulo = tk.Label(self.tela_listagem_veiculos, text="VEÍCULOS CADASTRADOS", font=("Arial", 16, "bold"))
         titulo.pack(pady=20)
         
         # Frame para filtro
-        filtro_frame = tk.Frame(self.tela_listagem)
+        filtro_frame = tk.Frame(self.tela_listagem_veiculos)
         filtro_frame.pack(fill="x", padx=20, pady=5)
         
         tk.Label(filtro_frame, text="Filtrar por tipo:").pack(side="left")
@@ -264,15 +268,15 @@ class SistemaVeiculos:
         filtro_btn.pack(side="left", padx=5)
         
         # Frame para a lista
-        lista_frame = tk.Frame(self.tela_listagem, padx=20)
-        lista_frame.pack(fill="both", expand=True, pady=10)
+        lista_frame_veiculos = tk.Frame(self.tela_listagem_veiculos, padx=20)
+        lista_frame_veiculos.pack(fill="both", expand=True, pady=10)
         
         # Scrollbar
-        scrollbar = tk.Scrollbar(lista_frame)
+        scrollbar = tk.Scrollbar(lista_frame_veiculos)
         scrollbar.pack(side="right", fill="y")
         
         # Listbox
-        self.listbox = tk.Listbox(lista_frame, width=70, height=10, font=("Arial", 10))
+        self.listbox = tk.Listbox(lista_frame_veiculos, width=70, height=10, font=("Arial", 10))
         self.listbox.pack(side="left", fill="both", expand=True)
         
         # Configura scrollbar
@@ -280,7 +284,7 @@ class SistemaVeiculos:
         scrollbar.config(command=self.listbox.yview)
         
         # Botões
-        botoes_frame = tk.Frame(self.tela_listagem)
+        botoes_frame = tk.Frame(self.tela_listagem_veiculos)
         botoes_frame.pack(pady=15)
         
         tk.Button(botoes_frame, text="Ver Detalhes", width=12,
@@ -289,6 +293,56 @@ class SistemaVeiculos:
         tk.Button(botoes_frame, text="Voltar", width=12,
                 command=lambda: self.mostrar_tela(self.tela_principal)).pack(side="left", padx=5)
     
+    def configurar_tela_listagem_proprietario(self):
+        # # Título
+        titulo = tk.Label(self.tela_listagem_proprietario, text="PROPRIETÁRIOS CADASTRADOS", font=("Arial", 16, "bold"))
+        titulo.pack(pady=20)
+        
+        # Frame para o Treeview e Scrollbars
+        # Corrigido typo: self.tela_listagem_prprietarios para self.tela_listagem_proprietario
+        tree_frame = ttk.Frame(self.tela_listagem_proprietario, padding="10")
+        tree_frame.pack(fill="both", expand=True, padx=20, pady=10)
+
+        # Definir as colunas do Treeview
+        colunas = ("nome", "cpf", "placa", "veiculo_desc")
+        self.treeview_proprietarios = ttk.Treeview(tree_frame, columns=colunas, show="headings", height=15)
+
+        # Definir os cabeçalhos das colunas
+        self.treeview_proprietarios.heading("nome", text="Nome Completo")
+        self.treeview_proprietarios.heading("cpf", text="CPF")
+        self.treeview_proprietarios.heading("placa", text="Placa Associada")
+        self.treeview_proprietarios.heading("veiculo_desc", text="Descrição do Veículo")
+
+        # Definir a largura das colunas (ajuste conforme necessário)
+        self.treeview_proprietarios.column("nome", width=250, minwidth=200, anchor=tk.W)
+        self.treeview_proprietarios.column("cpf", width=120, minwidth=100, anchor=tk.CENTER)
+        self.treeview_proprietarios.column("placa", width=120, minwidth=100, anchor=tk.CENTER)
+        self.treeview_proprietarios.column("veiculo_desc", width=250, minwidth=200, anchor=tk.W)
+
+        # Scrollbar Vertical
+        scrollbar_y_prop = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.treeview_proprietarios.yview)
+        self.treeview_proprietarios.configure(yscrollcommand=scrollbar_y_prop.set)
+        
+        # Scrollbar Horizontal
+        scrollbar_x_prop = ttk.Scrollbar(tree_frame, orient=tk.HORIZONTAL, command=self.treeview_proprietarios.xview)
+        self.treeview_proprietarios.configure(xscrollcommand=scrollbar_x_prop.set)
+
+        # Empacotar Treeview e Scrollbars
+        scrollbar_y_prop.pack(side=tk.RIGHT, fill=tk.Y)
+        scrollbar_x_prop.pack(side=tk.BOTTOM, fill=tk.X) # Colocar antes do treeview para melhor layout
+        self.treeview_proprietarios.pack(side=tk.LEFT, fill="both", expand=True)
+        
+        # Botões
+        botoes_frame_lp = tk.Frame(self.tela_listagem_proprietario) # Nomeado especificamente
+        botoes_frame_lp.pack(pady=15)
+        
+        tk.Button(botoes_frame_lp, text="Voltar", width=12,
+                  command=lambda: self.mostrar_tela(self.tela_principal)).pack(side="left", padx=5)
+        
+    def ir_para_listagem_veiculos(self): # Renomeado de atualizar_listagem para clareza
+        self.filtrar_veiculos() # Atualiza o conteúdo do listbox
+        self.mostrar_tela(self.tela_listagem_veiculos)    
+        
     def salvar_veiculo(self):
         # Obter dados comuns
         placa = self.placa_entry.get().strip().upper()
@@ -383,7 +437,7 @@ class SistemaVeiculos:
     def atualizar_listagem(self):
         # Atualizar a listagem e mostrar a tela
         self.filtrar_veiculos()
-        self.mostrar_tela(self.tela_listagem)
+        self.mostrar_tela(self.tela_listagem_veiculos)
     
     def filtrar_veiculos(self):
         # Limpar a lista
@@ -401,6 +455,41 @@ class SistemaVeiculos:
                 self.listbox.insert("end", str(veiculo))
             elif filtro == "Caminhão" and isinstance(veiculo, Caminhao):
                 self.listbox.insert("end", str(veiculo))
+    
+    def exibir_proprietarios(self):
+       # Limpar o Treeview antes de adicionar novos itens
+        for item in self.treeview_proprietarios.get_children():
+            self.treeview_proprietarios.delete(item)
+
+        if not self.proprietarios:
+            # Opcional: mostrar uma mensagem se não houver proprietários.
+            # Ou simplesmente deixar a tabela vazia.
+            # self.treeview_proprietarios.insert("", tk.END, values=("Nenhum proprietário cadastrado.", "", "", ""))
+            return
+
+        # Adicionar os dados dos proprietários ao Treeview
+        # Certifique-se que sua classe Proprietario tem os getters/properties: 
+        # .nome, .cpf (formatado), .placa, .descricao_veiculo
+        for proprietario in self.proprietarios:
+            try:
+                # Tenta obter os valores usando properties. Ajuste se os nomes dos atributos/getters forem diferentes.
+                nome = proprietario.nome 
+                cpf = proprietario.cpf # Supondo que o getter .cpf formate o CPF
+                placa = proprietario.placa
+                desc_veiculo = proprietario.descricao_veiculo # ou o nome correto do atributo/getter
+
+                self.treeview_proprietarios.insert("", tk.END, values=(
+                    nome,
+                    cpf,
+                    placa,
+                    desc_veiculo
+                ))
+            except AttributeError as e:
+                print(f"Erro ao acessar atributo do proprietário: {e}. Verifique a classe Proprietario.")
+                # Você pode querer mostrar um erro ou um valor padrão no Treeview
+                self.treeview_proprietarios.insert("", tk.END, values=(
+                    "Erro de dados", "Erro", "Erro", "Erro"
+                ))
     
     def ver_detalhes(self):
         # Obter o índice selecionado
