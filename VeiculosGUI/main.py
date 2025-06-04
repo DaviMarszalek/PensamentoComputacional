@@ -299,7 +299,6 @@ class SistemaVeiculos:
         titulo.pack(pady=20)
         
         # Frame para o Treeview e Scrollbars
-        # Corrigido typo: self.tela_listagem_prprietarios para self.tela_listagem_proprietario
         tree_frame = ttk.Frame(self.tela_listagem_proprietario, padding="10")
         tree_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
